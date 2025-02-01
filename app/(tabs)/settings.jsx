@@ -1,14 +1,59 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+// screens/settings.js
+import {
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Button,
+} from "react-native";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
+import SettingItem from "../components/SettingItem";
+import useNotifications from "../hooks/useNotifications";
 
-const settings = () => {
+const Settings = () => {
+  const { theme, toggleTheme, isEnabled } = useContext(ThemeContext);
+  const { notificationEnabled, toggleNotifications } = useNotifications();
+
   return (
-    <View>
-      <Text>settings</Text>
-    </View>
-  )
-}
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: theme.colors.background },
+        ]}
+      >
+        <Text style={[styles.headerText, { color: theme.colors.text }]}>
+          Settings
+        </Text>
 
-export default settings
+        <SettingItem
+          label="Dark Mode"
+          value={isEnabled}
+          onValueChange={toggleTheme}
+        />
 
-const styles = StyleSheet.create({})
+        <SettingItem
+          label="Notifications"
+          value={notificationEnabled}
+          onValueChange={toggleNotifications}
+        />
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 20,
+    gap: 20,
+  },
+  headerText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    marginVertical: 20,
+  },
+});
+
+export default Settings;
