@@ -1,16 +1,19 @@
+// screens/settings.js
 import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  Switch,
   Text,
-  View,
+  Button,
 } from "react-native";
 import { useContext } from "react";
 import { ThemeContext } from "../contexts/ThemeContext";
+import SettingItem from "../components/SettingItem";
+import useNotifications from "../hooks/useNotifications";
 
-const settings = () => {
+const Settings = () => {
   const { theme, toggleTheme, isEnabled } = useContext(ThemeContext);
+  const { notificationEnabled, toggleNotifications } = useNotifications();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -20,35 +23,25 @@ const settings = () => {
           { backgroundColor: theme.colors.background },
         ]}
       >
-        <Text style={styles.headerText}>Settings</Text>
-        <View
-          style={[
-            styles.switchView,
-            { borderColor: theme.colors.background_300 },
-          ]}
-        >
-          <Text style={[styles.settingText, { color: theme.colors.text }]}>
-            Dark Mode
-          </Text>
-          <Switch onChange={toggleTheme} value={isEnabled} />
-        </View>
-        <View
-          style={[
-            styles.switchView,
-            { borderColor: theme.colors.background_300 },
-          ]}
-        >
-          <Text style={[styles.settingText, { color: theme.colors.text }]}>
-            Noffications
-          </Text>
-          <Switch onChange={toggleTheme} value={isEnabled} />
-        </View>
+        <Text style={[styles.headerText, { color: theme.colors.text }]}>
+          Settings
+        </Text>
+
+        <SettingItem
+          label="Dark Mode"
+          value={isEnabled}
+          onValueChange={toggleTheme}
+        />
+
+        <SettingItem
+          label="Notifications"
+          value={notificationEnabled}
+          onValueChange={toggleNotifications}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 };
-
-export default settings;
 
 const styles = StyleSheet.create({
   container: {
@@ -59,17 +52,8 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 40,
-  },
-  switchView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderWidth: 1,
-    padding: 10,
-    borderRadius: 20,
-    alignItems: "center",
-  },
-  settingText: {
-    fontSize: 20,
+    marginVertical: 20,
   },
 });
+
+export default Settings;
